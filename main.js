@@ -62,7 +62,7 @@ var world = [
   [2, 1, 1, 1, 1, 1, 5, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2, 5, 1, 1, 1, 1, 1, 2],
   [2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2],
   [2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2],
-  [2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2],
+  [2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 1, 1, 5, 1, 1, 5, 1, 1, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2],
   [2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 4, 4, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2],
   [2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 0, 0, 0, 0, 0, 0, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2],
   [1, 1, 1, 1, 1, 1, 5, 1, 1, 5, 2, 0, 0, 0, 0, 0, 0, 2, 5, 1, 1, 5, 1, 1, 1, 1, 1, 1],
@@ -74,7 +74,7 @@ var world = [
   [2, 1, 1, 1, 1, 1, 5, 1, 1, 5, 1, 1, 1, 2, 2, 1, 1, 1, 5, 1, 1, 5, 1, 1, 1, 1, 1, 2],
   [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2],
   [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2],
-  [2, 1, 1, 1, 2, 2, 5, 1, 1, 5, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 5, 2, 2, 1, 1, 1, 2],
+  [2, 1, 1, 1, 2, 2, 5, 1, 1, 5, 1, 1, 5, 1, 1, 5, 1, 1, 5, 1, 1, 5, 2, 2, 1, 1, 1, 2],
   [2, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2],
   [2, 2, 2, 3, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 3, 2, 2, 2],
   [2, 1, 1, 5, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 5, 1, 1, 2],
@@ -97,20 +97,36 @@ var pacman = {
 
 var ghosts = {
   '0': { // pink
-    x: 13,
-    y: 13
+    x:          13,
+    y:          13,
+    direction:  0,
+    chase:      false,
+    scatter:    false,
+    frightened: false
   },
-  '1': {
-    x: 14,
-    y: 13
+  '1': { // orange
+    x:          14,
+    y:          13,
+    direction:  0,
+    chase:      false,
+    scatter:    false,
+    frightened: false
   },
-  2: {
-    x: 13,
-    y: 14
+  2: { // blue
+    x:          13,
+    y:          14,
+    direction:  0,
+    chase:      false,
+    scatter:    false,
+    frightened: false
   },
-  3: {
-    x: 14,
-    y: 14
+  3: { // red
+    x:          14,
+    y:          14,
+    direction:  0,
+    chase:      false,
+    scatter:    false,
+    frightened: false
   }
 }
 
@@ -120,6 +136,7 @@ FUNCTIONS
 
 function displayWorld() {
   var output = ''
+  var inflectionPts = []
   // each arr inside world arr
   for (var i = 0; i < world.length; i++) {
     output += '\n<div class="row">' // puts everything inside a row
@@ -129,6 +146,7 @@ function displayWorld() {
       // for marker purposes
       if (world[i][j] == 5) {
         output += '\n\t<div class="hlight"></div>'
+        inflectionPts.push({x: i, y: j})
       }
 
       if (world[i][j] == 4) {
@@ -146,9 +164,12 @@ function displayWorld() {
       else if (world[i][j] == 0) {
         output += '\n\t<div class="empty"></div>'
       }
-
     }
     output += '\n</div>' // close div.row
+  }
+  console.dir(inflectionPts)
+  for (var inf in inflectionPts) {
+    console.log(inflectionPts[inf])
   }
   $('#world').html(output)
 }
@@ -195,57 +216,39 @@ function gameTick() {
   moveGhosts()
 }
 
-/*
-
-Ghosts Logic:
-
-3 modes:
-1) chase : default, tries to move towards pacman
-2) scatter : each ghost retreat to quadrant of map and camps
-3) frightened : runs away from pacman, can be eaten. goes slower
-
-changes between chase and scatter occur based on a timer, which is reset at beginning of a new level or a new life.
-
-1st level scatter pattern:
-
-Scatter for 7 seconds, then Chase for 20 seconds.
-Scatter for 7 seconds, then Chase for 20 seconds.
-Scatter for 5 seconds, then Chase for 20 seconds.
-Scatter for 5 seconds, then switch to Chase mode permanently.
-
-Target Tiles and Ghost movement
-
-majority of the time each ghost has a specific target tile it's trying to reach, and its' behavior revolves around reaching that tile. (target tiles can and often are located in an inaccessable tile)
-
-chase mode uses pacmans x,y as target tile
-scatter mode uses a tile in a corner of the map for a ghost to try to reach
-frightened mode ghosts psuedorandomly decide which turns to make at every corner
-
-Ghosts only plan 1 step in advance when moving
-
-whenever entering a new tile, ghost looks ahead to next tile and decides where it will go next. whenever a ghost is in a tile with only 2 exits (say - or + on X-axis) it will continue in its' current direction.
-
-ghosts will NEVER reverse their current direction, unless they are changing modes
-
- */
+// SEE NOTES.MD FOR GHOST LOGIC
+var inflectionPts = [{x:1,y:6},{x:1,y:21},{x:5,y:1},{x:5,y:6},{x:5,y:9},{x:5,y:12},{x:5,y:15},{x:5,y:18},{x:5,y:21},{x:5,y:26},{x:8,y:6},{x:8,y:21},{x:11,y:12},{x:11,y:15},{x:14,y:6},{x:14,y:9},{x:14,y:18},{x:14,y:21},{x:17,y:9},{x:17,y:18},{x:20,y:6},{x:20,y:9},{x:20,y:18},{x:20,y:21},{x:23,y:6},{x:23,y:9},{x:23,y:12},{x:23,y:15},{x:23,y:18},{x:23,y:21},{x:26,y:3},{x:26,y:24},{x:29,y:12},{x:29,y:15}
+]
 
 function moveGhosts() {
   var $ghost1 = $('.ghost-1')
   var ghost1 = ghosts[0]
-  // console.log(ghost1)
-  if (time > 2) {
-    if (ghost1.y > 11) {
-      ghost1.y -= 1
-    } else if (ghost1.y == 11) {
-      console.log('DO AI HERE')
-    }
+
+  if (ghost1.y > 11) {
+    ghost1.y -= 1
+  }
+  else if (ghost1.y == 11) {
+    // get number of tiles x & y to get to destination tile
+    var distFromPacman = getDistanceToTile(ghost1, pacman)
+    console.log('tile dist from pacman!!!', distFromPacman)
   }
 
   displayGhosts()
 }
 
-function ghostEnter() {
-  // body...
+function getDistanceToTile(currTile, destTile) {
+  var xDist, yDist
+
+  if (destTile.x < currTile.x) {
+    xDist = currTile.x - destTile.x
+  }
+
+  if (destTile.y < currTile.y) {
+    yDist = currTile.y - destTile.y
+  }
+
+  // console.log('DISTANCE IN COORDS:::::', [xDist, yDist])
+  return xDist + yDist
 }
 
 function movePacman(keyCode) {
@@ -314,7 +317,7 @@ displayPacman()
 displayGhosts()
 displayScore()
 
-var _tick = setInterval(gameTick, 300)
+// var _tick = setInterval(gameTick, 300)
 var _time = setInterval(showTime, 1000)
 
 
