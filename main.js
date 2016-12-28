@@ -149,9 +149,10 @@ function gameTick() {
 }
 
 function moveGhosts() {
-  if (time > 5) {
-    console.log('LET ME BE FREEEEEEE', time)
-  }
+  var $ghost1 = $('.ghost-1')
+  var ghost1 = ghosts[0]
+  console.log($ghost1, ghost1)
+  if (time < 5) return -1
 }
 
 function movePacman(keyCode) {
