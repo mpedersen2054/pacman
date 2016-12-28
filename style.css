@@ -42,3 +42,26 @@ body {
   top: 0;
   left: 0;
 }
+
+#score {
+  border: 1px solid #fff;
+  color: #fff;
+  width: 100px;
+  height: 100px;
+  font-size: 16px;
+  text-transform: uppercase;
+  text-align: center;
+  padding-top: 20px;
+  margin-left: 20px;
+  margin-top: 10px;
+  vertical-align: top;
+}
+
+#score, #world {
+  display: inline-block;
+}
+
+.game-score {
+  display: block;
+  font-size: 32px;
+}

@@ -41,6 +41,7 @@ var pacman = {
   x: 0,
   y: 0
 }
+var score = 0
 
 function displayWorld() {
   var output = ''
@@ -72,8 +73,13 @@ function displayPacman() {
   $('#pacman').css({'left': `${pacman.x * 20}px`})
 }
 
+function displayScore() {
+  $('.game-score').html(score)
+}
+
 displayWorld()
 displayPacman()
+displayScore()
 
 
 $(document).keydown(function(e) {
@@ -97,6 +103,8 @@ $(document).keydown(function(e) {
   // x is x-axis, moves up and down array (0...X)
   if (world[pacman.y][pacman.x] == 1) {
     world[pacman.y][pacman.x] = 0
+    score += 10
+    displayScore()
     displayWorld()
   }
 
