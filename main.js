@@ -25,7 +25,7 @@ var world1 = [
   [2,2,2,2,2,2,2,2,2,2]
 ]
 
-var world2 = [
+var world = [
   [2,2,2,2,2,2,2,2,2,2],
   [2,1,2,1,1,1,1,1,1,2],
   [2,1,2,1,1,1,1,1,1,2],
@@ -38,11 +38,11 @@ var world2 = [
 ]
 
 var pacman = {
-  x: 20,
-  y: 20
+  x: 0,
+  y: 0
 }
 
-function displayWorld(world) {
+function displayWorld() {
   var output = ''
 
   // each arr inside world arr
@@ -63,16 +63,16 @@ function displayWorld(world) {
     output += '\n</div>' // close div.row
   }
 
-  $('#world').append(output)
+  $('#world').html(output)
 }
 
 function displayPacman() {
   console.log(pacman)
-  $('#pacman').css({'top': `${pacman.y}px`})
-  $('#pacman').css({'left': `${pacman.x}px`})
+  $('#pacman').css({'top': `${pacman.y * 20}px`})
+  $('#pacman').css({'left': `${pacman.x * 20}px`})
 }
 
-displayWorld(world2)
+displayWorld()
 displayPacman()
 
 
@@ -81,16 +81,23 @@ $(document).keydown(function(e) {
   console.log(`pressed key ${e.keyCode}`)
 
   if (e.keyCode == 37) {
-    pacman.x -= 20
+    pacman.x--
   }
   else if (e.keyCode == 38) {
-    pacman.y -= 20
+    pacman.y--
   }
   else if (e.keyCode == 39) {
-    pacman.x += 20
+    pacman.x++
   }
   else if (e.keyCode == 40) {
-    pacman.y += 20
+    pacman.y++
+  }
+
+  // y is y-axis, moves up and down arrs in the arr of arrs
+  // x is x-axis, moves up and down array (0...X)
+  if (world[pacman.y][pacman.x] == 1) {
+    world[pacman.y][pacman.x] = 0
+    displayWorld()
   }
 
   displayPacman()
