@@ -57,6 +57,25 @@ var pacman = {
   score: 0
 }
 
+var ghosts = {
+  '0': {
+    x: 13,
+    y: 13
+  },
+  '1': {
+    x: 14,
+    y: 13
+  },
+  2: {
+    x: 13,
+    y: 14
+  },
+  3: {
+    x: 14,
+    y: 14
+  }
+}
+
 function displayWorld() {
   var output = ''
   // each arr inside world arr
@@ -85,11 +104,28 @@ function displayWorld() {
 }
 
 function displayPacman() {
-  // console.log(pacman)
-  updatePacmanDirection() // rotates bg-img based pacman.direction
-  $('#pacman').css({'top': `${pacman.y * 20}px`})
-  $('#pacman').css({'left': `${pacman.x * 20}px`})
+  var $pacman = $('#pacman')
+  updateBGDirection() // rotates bg-img based pacman.direction
+  $pacman.css({'top': `${pacman.y * 20}px`})
+  $pacman.css({'left': `${pacman.x * 20}px`})
 }
+
+function displayGhosts() {
+  console.log(ghosts['0'])
+  $('.ghost-0').css({'top': `${ghosts['0'].y * 20}px`})
+  $('.ghost-0').css({'left': `${ghosts['0'].x * 20}px`})
+
+  $('.ghost-1').css({'top': `${ghosts['1'].y * 20}px`})
+  $('.ghost-1').css({'left': `${ghosts['1'].x * 20}px`})
+
+  $('.ghost-2').css({'top': `${ghosts['2'].y * 20}px`})
+  $('.ghost-2').css({'left': `${ghosts['2'].x * 20}px`})
+
+  $('.ghost-3').css({'top': `${ghosts['3'].y * 20}px`})
+  $('.ghost-3').css({'left': `${ghosts['3'].x * 20}px`})
+}
+
+
 
 function displayScore() {
   $('.game-score').html(pacman.score)
@@ -106,35 +142,12 @@ function showTime() {
 // updates the game every 3 milliseconds
 function gameTick() {
   movePacman()
+  moveGhosts()
 }
 
-// rotate #pacman bg-img based on pacman.direction
-function updatePacmanDirection() {
-  var $pacman = $('#pacman')
-
-  if (pacman.direction == -1) {
-    $pacman.css({
-      '-moz-transform': 'rotate(180deg)',
-      '-webkit-transform': 'rotate(180deg)'
-    })
-  }
-  if (pacman.direction == -2) {
-    $pacman.css({
-      '-moz-transform': 'rotate(270deg)',
-      '-webkit-transform': 'rotate(270deg)'
-    })
-  }
-  if (pacman.direction == 1) {
-    $pacman.css({
-      '-moz-transform': 'rotate(360deg)',
-      '-webkit-transform': 'rotate(360deg)'
-    })
-  }
-  if (pacman.direction == 2) {
-    $pacman.css({
-      '-moz-transform': 'rotate(90deg)',
-      '-webkit-transform': 'rotate(90deg)'
-    })
+function moveGhosts() {
+  if (time > 5) {
+    console.log('LET ME BE FREEEEEEE', time)
   }
 }
 
@@ -167,9 +180,40 @@ function movePacman(keyCode) {
   displayPacman()
 }
 
+// rotate #pacman bg-img based on pacman.direction
+function updateBGDirection() {
+  var $pacman = $('#pacman')
+
+  if (pacman.direction == -1) {
+    $pacman.css({
+      '-moz-transform': 'rotate(180deg)',
+      '-webkit-transform': 'rotate(180deg)'
+    })
+  }
+  if (pacman.direction == -2) {
+    $pacman.css({
+      '-moz-transform': 'rotate(270deg)',
+      '-webkit-transform': 'rotate(270deg)'
+    })
+  }
+  if (pacman.direction == 1) {
+    $pacman.css({
+      '-moz-transform': 'rotate(360deg)',
+      '-webkit-transform': 'rotate(360deg)'
+    })
+  }
+  if (pacman.direction == 2) {
+    $pacman.css({
+      '-moz-transform': 'rotate(90deg)',
+      '-webkit-transform': 'rotate(90deg)'
+    })
+  }
+}
+
 
 displayWorld()
 displayPacman()
+displayGhosts()
 displayScore()
 
 var _tick = setInterval(gameTick, 300)

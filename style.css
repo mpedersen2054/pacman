@@ -20,14 +20,14 @@ body {
 }
 
 .coin {
-  background-image: url('coin3.png');
+  background-image: url('images/coin3.png');
   background-repeat: no-repeat;
   background-position: center;
   /*background-size: cover;*/
 }
 
 .big-coin {
-  background-image: url('coin3.png');
+  background-image: url('images/coin3.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -38,7 +38,7 @@ body {
 }
 
 #pacman {
-  background-image: url('pacman.gif');
+  background-image: url('images/pacman.gif');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -83,4 +83,30 @@ body {
 .game-score {
   display: block;
   font-size: 32px;
+}
+
+
+.ghost {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  width: 20px;
+  height: 20px;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.ghost-0 {
+  background-image: url('images/ghost0.gif');
+}
+.ghost-1 {
+ background-image: url('images/ghost1.gif');
+}
+.ghost-2 {
+  background-image: url('images/ghost2.gif');
+}
+.ghost-3 {
+  background-image: url('images/ghost3.gif');
 }
