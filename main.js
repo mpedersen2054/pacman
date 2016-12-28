@@ -37,6 +37,11 @@ var world2 = [
   [2,2,2,2,2,2,2,2,2,2]
 ]
 
+var pacman = {
+  x: 20,
+  y: 20
+}
+
 function displayWorld(world) {
   var output = ''
 
@@ -61,14 +66,33 @@ function displayWorld(world) {
   $('#world').append(output)
 }
 
+function displayPacman() {
+  console.log(pacman)
+  $('#pacman').css({'top': `${pacman.y}px`})
+  $('#pacman').css({'left': `${pacman.x}px`})
+}
 
-$(function() {
+displayWorld(world2)
+displayPacman()
 
-  displayWorld(world2)
 
-  $(document).on('keydown', function(e) {
-    // left: 37, up: 38, right: 39, down: 40
-    console.log(`pressed key ${e.keyCode}`)
-  })
+$(document).keydown(function(e) {
+  // left: 37, up: 38, right: 39, down: 40
+  console.log(`pressed key ${e.keyCode}`)
+
+  if (e.keyCode == 37) {
+    pacman.x -= 20
+  }
+  else if (e.keyCode == 38) {
+    pacman.y -= 20
+  }
+  else if (e.keyCode == 39) {
+    pacman.x += 20
+  }
+  else if (e.keyCode == 40) {
+    pacman.y += 20
+  }
+
+  displayPacman()
 
 })
