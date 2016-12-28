@@ -20,9 +20,10 @@ body {
 }
 
 .coin {
-  background-image: url('coin.gif');
+  background-image: url('coin2.png');
   background-repeat: no-repeat;
   background-position: center;
+  background-size: cover;
 }
 
 .empty {
