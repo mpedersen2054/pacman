@@ -100,19 +100,10 @@ function gameTick() {
   movePacman()
 }
 
-$('#pacman').css({
-  '-moz-transform': 'rotate(360deg)',
-  '-webkit-transform': 'rotate(360deg)'
-})
-
-// original rot 0
-// left rot 180deg
-// up rot 270deg
-// right rot original
-// down rot 90deg
-
+// rotate #pacman bg-img based on pacman.direction
 function updatePacmanDirection() {
   var $pacman = $('#pacman')
+
   if (pacman.direction == -1) {
     $pacman.css({
       '-moz-transform': 'rotate(180deg)',
@@ -144,19 +135,15 @@ function movePacman(keyCode) {
   // check if pacman is running into a well, if not move him in the direction hes going
 
   if (pacman.direction == -1 && world[pacman.y][pacman.x-1] !== 2) { // left
-    updatePacmanDirection()
     pacman.x--
   }
   else if (pacman.direction == -2 && world[pacman.y-1][pacman.x] !== 2) { // up
-    updatePacmanDirection()
     pacman.y--
   }
   else if (pacman.direction == 1 && world[pacman.y][pacman.x+1] !== 2) { // right
-    updatePacmanDirection()
     pacman.x++
   }
   else if (pacman.direction == 2 && world[pacman.y+1][pacman.x] !== 2) { // down
-    updatePacmanDirection()
     pacman.y++
   }
 
@@ -183,9 +170,19 @@ var _time = setInterval(showTime, 1000)
 
 $(document).keydown(function(e) {
   // update pacmans current direction based on key pressed
-  if (e.keyCode == 37) pacman.direction = -1
-  if (e.keyCode == 38) pacman.direction = -2
-  if (e.keyCode == 39) pacman.direction = 1
-  if (e.keyCode == 40) pacman.direction = 2
+  if (e.keyCode == 37) {
+    pacman.direction = -1
+  }
+  if (e.keyCode == 38) {
+    pacman.direction = -2
+  }
+  if (e.keyCode == 39) {
+    pacman.direction = 1
+  }
+  if (e.keyCode == 40) {
+    pacman.direction = 2
+  }
+
+  updatePacmanDirection() // rotates bg-img based pacman.direction
 
 })
