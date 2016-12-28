@@ -19,6 +19,10 @@ body {
   background-color: blue;
 }
 
+.hlight {
+  background-color: orange;
+}
+
 .coin {
   background-image: url('images/coin3.png');
   background-repeat: no-repeat;
@@ -38,7 +42,7 @@ body {
 }
 
 .gate {
-  background-color: #fff;
+  background-color: pink;
 }
 
 #pacman {
@@ -76,8 +80,6 @@ body {
   display: block;
   padding: 20px 0;
   font-size: 32px;
-  /*margin-top: 5px;*/
-  /*border: 1px solid #fff;*/
 }
 
 #world, #meta {
