@@ -10,6 +10,10 @@ List of JS features to build:
 1 => COIN
 0 => EMPTY
 
+// VARIABLE DECLARATION
+// FUNCTION DEFINITIONS
+// CLICK HANDLER
+
  */
 
 
@@ -38,8 +42,8 @@ var world = [
 ]
 
 var pacman = {
-  x: 0,
-  y: 0
+  x: 1,
+  y: 1
 }
 var score = 0
 
@@ -86,16 +90,16 @@ $(document).keydown(function(e) {
   // left: 37, up: 38, right: 39, down: 40
   console.log(`pressed key ${e.keyCode}`)
 
-  if (e.keyCode == 37) {
+  if (e.keyCode == 37 && world[pacman.y][pacman.x-1] !== 2) {
     pacman.x--
   }
-  else if (e.keyCode == 38) {
+  else if (e.keyCode == 38 && world[pacman.y-1][pacman.x] !== 2) {
     pacman.y--
   }
-  else if (e.keyCode == 39) {
+  else if (e.keyCode == 39 && world[pacman.y][pacman.x+1] !== 2) {
     pacman.x++
   }
-  else if (e.keyCode == 40) {
+  else if (e.keyCode == 40 && world[pacman.y+1][pacman.x] !== 2) {
     pacman.y++
   }
 
