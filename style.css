@@ -43,21 +43,32 @@ body {
   left: 0;
 }
 
-#score {
+#meta {
+  vertical-align: top;
   border: 1px solid #fff;
   color: #fff;
-  width: 100px;
-  height: 100px;
   font-size: 16px;
-  text-transform: uppercase;
+  width: 200px;
+  height: 300px;
+  margin: 10px 0 0 20px;
   text-align: center;
-  padding-top: 20px;
-  margin-left: 20px;
-  margin-top: 10px;
-  vertical-align: top;
 }
 
-#score, #world {
+#score {
+  display: block;
+  padding: 20px 0;
+  margin-bottom: 20px;
+}
+
+#time {
+  display: block;
+  padding: 20px 0;
+  font-size: 32px;
+  /*margin-top: 5px;*/
+  /*border: 1px solid #fff;*/
+}
+
+#world, #meta {
   display: inline-block;
 }
 
