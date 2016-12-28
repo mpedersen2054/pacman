@@ -20,7 +20,7 @@ var world = [
   [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
   [2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
   [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2],
-  [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2],
+  [2, 3, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 3, 2],
   [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2],
   [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
   [2, 1, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 1, 2],
@@ -42,7 +42,7 @@ var world = [
   [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2],
   [2, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2],
   [2, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2],
-  [2, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2],
+  [2, 2, 2, 3, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 3, 2, 2, 2],
   [2, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 2],
   [2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2],
   [2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2],
@@ -64,13 +64,20 @@ function displayWorld() {
     output += '\n<div class="row">' // puts everything inside a row
     // each indv rows vals
     for (var j = 0; j < world[i].length; j++) {
-      if (world[i][j] == 2) {
+
+      if (world[i][j] == 3) {
+        output += '\n\t<div class="big-coin"></div>'
+      }
+      else if (world[i][j] == 2) {
         output += '\n\t<div class="brick"></div>'
-      } else if (world[i][j] == 1) {
+      }
+      else if (world[i][j] == 1) {
         output += '\n\t<div class="coin"></div>'
-      } else if (world[i][j] == 0) {
+      }
+      else if (world[i][j] == 0) {
         output += '\n\t<div class="empty"></div>'
       }
+
     }
     output += '\n</div>' // close div.row
   }
@@ -79,6 +86,7 @@ function displayWorld() {
 
 function displayPacman() {
   // console.log(pacman)
+  updatePacmanDirection() // rotates bg-img based pacman.direction
   $('#pacman').css({'top': `${pacman.y * 20}px`})
   $('#pacman').css({'left': `${pacman.x * 20}px`})
 }
@@ -182,7 +190,5 @@ $(document).keydown(function(e) {
   if (e.keyCode == 40) {
     pacman.direction = 2
   }
-
-  updatePacmanDirection() // rotates bg-img based pacman.direction
 
 })

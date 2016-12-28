@@ -26,6 +26,13 @@ body {
   /*background-size: cover;*/
 }
 
+.big-coin {
+  background-image: url('coin3.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
 .empty {
   background-color: #000;
 }
