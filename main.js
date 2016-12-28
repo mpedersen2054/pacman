@@ -158,6 +158,7 @@ function movePacman(keyCode) {
 
   // check if pacman is running into a well, if not move him in the direction hes going
 
+
   if (pacman.direction == -1 && world[pacman.y][pacman.x-1] !== 2) { // left
     pacman.x--
   }
