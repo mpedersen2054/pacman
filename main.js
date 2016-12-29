@@ -1,5 +1,13 @@
 
 // LOAD IN 2D ARRAY FROM WORLD.JS
+//
+var _tick, _time
+
+var game = {
+  level: 1,
+  speed: 300,
+  lifes: 1
+}
 
 var pacman = {
   x: 1,
@@ -123,21 +131,17 @@ function showTime() {
 function gameTick() {
   movePacman()
   moveGhosts()
-  checkIfCollision() // might not always work?
 }
 
-function checkIfCollision() {
+function checkIfCollision(pacmanCoords, ghost1Coords) {
   // need to turn coords into string because object
   // comparision in JS works like this:
-  // a={1:'one',2:'two'} b={1:'one',2:'two'} a==b // FALSE
-  // a='{1:'one',2:'two'}' b='{1:'one',2:'two'}' // TRUE
-  var pacmanCoords = JSON.stringify({ x: pacman.x, y: pacman.y })
-  var ghost1Coords = JSON.stringify({ x: ghosts[0].x, y: ghosts[0].y })
+  //
 
-  if (pacmanCoords == ghost1Coords) {
-    console.log('====================================')
-    console.log('============ END GAME ==============')
-    console.log('====================================')
+  if (pacmanCoords.x == ghost1Coords.x && pacmanCoords.y == ghost1Coords.y) {
+    clearInterval(_tick)
+    clearInterval(_time)
+    gameOver()
   }
 }
 
@@ -198,6 +202,7 @@ function moveGhosts() {
   var ghost1 = ghosts[0]
 
   // NO WALL IN CURRENT DIRECTION
+  checkIfCollision({x:pacman.x,y:pacman.y},{x:ghost1.x,y:ghost1.y})
 
   if (ghost1.direction == -1 && world[ghost1.y][ghost1.x-1] !== 2) {
     ghost1.x--
@@ -227,6 +232,9 @@ function moveGhosts() {
     simpleAI(0, 2)
   }
 
+  // checkCollision twice? because if they are heading towards
+  // each other sometimes they jump over the other and it skips setting off cIC
+  checkIfCollision({x:pacman.x,y:pacman.y},{x:ghost1.x,y:ghost1.y})
   displayGhosts()
 }
 
@@ -248,7 +256,7 @@ function getDistanceToTile(currTile, destTile) {
 function movePacman(keyCode) {
 
   // check if pacman is running into a well, if not move him in the direction hes going
-
+  //
 
   if (pacman.direction == -1 && world[pacman.y][pacman.x-1] !== 2) { // left
     pacman.x--
@@ -305,14 +313,20 @@ function updateBGDirection() {
   }
 }
 
+function gameOver() {
+  $('#meta').append(`<h5>GAME OVER!</h5>`)
+  // clearInterval(_tick)
+  // clearInterval(_time)
+}
+
 
 displayWorld()
 displayPacman()
 displayGhosts()
 displayScore()
 
-var _tick = setInterval(gameTick, 300)
-var _time = setInterval(showTime, 1000)
+_tick = setInterval(gameTick, 300)
+_time = setInterval(showTime, 1000)
 
 
 $(document).keydown(function(e) {
