@@ -214,6 +214,22 @@ function showTime() {
 function gameTick() {
   movePacman()
   moveGhosts()
+  checkIfCollision()
+}
+
+function checkIfCollision() {
+  // need to turn coords into string because object
+  // comparision in JS works like this:
+  // a={1:'one',2:'two'} b={1:'one',2:'two'} a==b // FALSE
+  // a='{1:'one',2:'two'}' b='{1:'one',2:'two'}' // TRUE
+  var pacmanCoords = JSON.stringify({ x: pacman.x, y: pacman.y })
+  var ghost1Coords = JSON.stringify({ x: ghosts[0].x, y: ghosts[0].y })
+
+  if (pacmanCoords == ghost1Coords) {
+    console.log('====================================')
+    console.log('============ END GAME ==============')
+    console.log('====================================')
+  }
 }
 
 // SEE NOTES.MD FOR GHOST LOGIC
@@ -224,58 +240,87 @@ function moveGhosts() {
   var $ghost1 = $('.ghost-1')
   var ghost1 = ghosts[0]
 
-  // var distFromPacman = getDistanceToTile(ghost1, pacman)
-  // ghost1.direction = -1
-
-  // SMOOTH SAILING
+  // NO WALL IN CURRENT DIRECTION
 
   if (ghost1.direction == -1 && world[ghost1.y][ghost1.x-1] !== 2) {
-    console.log('moving left')
+    // console.log('moving left')
     ghost1.x--
   }
   else if (ghost1.direction == -2 && world[ghost1.y-1][ghost1.x] !== 2) {
-    console.log('moving up')
+    // console.log('moving up')
     ghost1.y--
   }
   else if (ghost1.direction == 1 && world[ghost1.y][ghost1.x+1] !== 2) {
-    console.log('moving right')
+    // console.log('moving right')
     ghost1.x++
   }
   else if (ghost1.direction == 2 && world[ghost1.y+1][ghost1.x] !== 2) {
-    console.log('moving down')
+    // console.log('moving down')
     ghost1.y++
   }
 
   // HIT A WALL
 
   if (ghost1.direction == -1 && world[ghost1.y][ghost1.x-1] == 2) {
-    console.log('HIT A WALL GOING LEFT')
+    // console.log('HIT A WALL GOING LEFT')
     var lup = world[ghost1.y-1][ghost1.x] !== 2
     var ldown = world[ghost1.y+1][ghost1.x] !== 2
     var possiblePaths = 0
     lup ? possiblePaths++ : possiblePaths
     ldown ? possiblePaths++ : possiblePaths
-    console.log('possible paths: ', possiblePaths)
-    // logic for if there is more than 1 path goes here
 
-    if (lup) {
-      ghost1.direction = -2
-    }
-    if (ldown) {
-      ghost1.direction = 2
+    if (possiblePaths < 2) {
+      // if lup==true set direction=-2, else direction=2
+      ghost1.direction = lup ? -2 : 2
+    } else {
+      var random = Math.ceil(Math.random() * possiblePaths)
+      ghost1.direction = (random == 1) ? 2 : -2
     }
   }
   else if (ghost1.direction == -2 && world[ghost1.y-1][ghost1.x] == 2) {
-    console.log('HIT A WALL GOING UP')
+    // console.log('HIT A WALL GOING UP')
+    var dleft = world[ghost1.y][ghost1.x-1] !== 2
+    var dright = world[ghost1.y][ghost1.x+1] !== 2
+    var possiblePaths = 0
+    dleft ? possiblePaths++ : possiblePaths
+    dright ? possiblePaths++ : possiblePaths
+
+    if (possiblePaths < 2) {
+      ghost1.direction = dleft ? -1 : 1
+    } else {
+      var random = Math.ceil(Math.random() * possiblePaths)
+      ghost1.direction = (random == 1) ? -1 : 1
+    }
   }
   else if (ghost1.direction == 1 && world[ghost1.y][ghost1.x+1] == 2) {
-    console.log('HIT A WALL GOING RIGHT')
+    var lup = world[ghost1.y-1][ghost1.x] !== 2
+    var ldown = world[ghost1.y+1][ghost1.x] !== 2
+    var possiblePaths = 0
+    lup ? possiblePaths++ : possiblePaths
+    ldown ? possiblePaths++ : possiblePaths
+
+    if (possiblePaths < 2) {
+      ghost1.direction = lup ? -2 : 2
+    } else {
+     var random = Math.ceil(Math.random() * possiblePaths)
+     ghost1.direction = (random == 1) ? -2 : 2
+    }
   }
   else if (ghost1.direction == 2 && world[ghost1.y+1][ghost1.x] == 2) {
-    console.log('HIT A WALL GOING DOWN')
+    var dleft = world[ghost1.y][ghost1.x-1] !== 2
+    var dright = world[ghost1.y][ghost1.x+1] !== 2
+    var possiblePaths = 0
+    dleft ? possiblePaths++ : possiblePaths
+    dright ? possiblePaths++ : possiblePaths
+
+    if (possiblePaths < 2) {
+      ghost1.direction = dleft ? -1 : 1
+    } else {
+      var random = Math.ceil(Math.random() * possiblePaths)
+      ghost1.direction = (random == 1) ? -1 : 1
+    }
   }
 
-  console.log(ghost1)
   displayGhosts()
 }
 
