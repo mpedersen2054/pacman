@@ -1,11 +1,11 @@
 
 // LOAD IN 2D ARRAY FROM WORLD.JS
 //
-var _tick, _time
+// var _tick, _time
 
 var game = {
   level: 1,
-  speed: 300,
+  speed: 200,
   lifes: 1
 }
 
@@ -58,6 +58,7 @@ FUNCTIONS
 function displayWorld() {
   var output = ''
   var inflectionPts = []
+
   // each arr inside world arr
   for (var i = 0; i < world.length; i++) {
     output += '\n<div class="row">' // puts everything inside a row
@@ -129,16 +130,39 @@ function showTime() {
 
 // updates the game every 3 milliseconds
 function gameTick() {
+  checkIfCollision(pacman,ghosts[0])
   movePacman()
   moveGhosts()
+  checkIfCollision(pacman,ghosts[0])
 }
 
 function checkIfCollision(pacmanCoords, ghost1Coords) {
-  // need to turn coords into string because object
-  // comparision in JS works like this:
-  //
+
+  // pac L -> g1 R ::: WORKED
+  // pac R -> g1 L ::: WORKED
+  // pac T -> g1 B ::: WORKED
+  // pac B -> g1 T ::: WORKED : sorta, endgame ended w pacman x=14 ghost1 x=13
+  // var px = $('#pacman').css('left')
+  // var py = $('#pacman').css('top')
+  // var gx = $('.ghost-1').css('left')
+  // var gy = $('.ghost-1').css('top')
+
+  // console.log(px, py, 'pacman')
+  // console.log(gx, gy, 'ghost')
+
+  // if ((px == gx && py == gy) || (py == gy && px == gx)) {
+  //     clearInterval(_tick)
+  //     clearInterval(_time)
+  //     gameOver()
+  // }
 
   if (pacmanCoords.x == ghost1Coords.x && pacmanCoords.y == ghost1Coords.y) {
+    clearInterval(_tick)
+    clearInterval(_time)
+    gameOver()
+  }
+
+  if (ghost1Coords.x == pacman.x && ghost1Coords.y == pacman.y) {
     clearInterval(_tick)
     clearInterval(_time)
     gameOver()
@@ -202,7 +226,7 @@ function moveGhosts() {
   var ghost1 = ghosts[0]
 
   // NO WALL IN CURRENT DIRECTION
-  checkIfCollision({x:pacman.x,y:pacman.y},{x:ghost1.x,y:ghost1.y})
+  checkIfCollision(pacman,ghosts[0])
 
   if (ghost1.direction == -1 && world[ghost1.y][ghost1.x-1] !== 2) {
     ghost1.x--
@@ -234,8 +258,9 @@ function moveGhosts() {
 
   // checkCollision twice? because if they are heading towards
   // each other sometimes they jump over the other and it skips setting off cIC
-  checkIfCollision({x:pacman.x,y:pacman.y},{x:ghost1.x,y:ghost1.y})
+  checkIfCollision(pacman,ghosts[0])
   displayGhosts()
+  // checkIfCollision(pacman,ghosts[0])
 }
 
 function getDistanceToTile(currTile, destTile) {
@@ -257,6 +282,7 @@ function movePacman(keyCode) {
 
   // check if pacman is running into a well, if not move him in the direction hes going
   //
+  checkIfCollision(pacman,ghosts[0])
 
   if (pacman.direction == -1 && world[pacman.y][pacman.x-1] !== 2) { // left
     pacman.x--
@@ -271,6 +297,8 @@ function movePacman(keyCode) {
     pacman.y++
   }
 
+  checkIfCollision(pacman,ghosts[0])
+
   // y is y-axis, moves up and down arrs in the arr of arrs
   // x is x-axis, moves up and down array (0...X)
   if (world[pacman.y][pacman.x] == 1) {
@@ -281,6 +309,7 @@ function movePacman(keyCode) {
   }
 
   displayPacman()
+  // checkIfCollision(pacman,ghosts[0])
 }
 
 // rotate #pacman bg-img based on pacman.direction
@@ -320,13 +349,14 @@ function gameOver() {
 }
 
 
+
 displayWorld()
 displayPacman()
 displayGhosts()
 displayScore()
 
-_tick = setInterval(gameTick, 300)
-_time = setInterval(showTime, 1000)
+var _tick = setInterval(gameTick, game.speed)
+var _time = setInterval(showTime, 1000)
 
 
 $(document).keydown(function(e) {
