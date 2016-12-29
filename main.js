@@ -214,7 +214,7 @@ function showTime() {
 function gameTick() {
   movePacman()
   moveGhosts()
-  checkIfCollision()
+  checkIfCollision() // might not always work?
 }
 
 function checkIfCollision() {
@@ -236,6 +236,54 @@ function checkIfCollision() {
 var inflectionPts = [{x:1,y:6},{x:1,y:21},{x:5,y:1},{x:5,y:6},{x:5,y:9},{x:5,y:12},{x:5,y:15},{x:5,y:18},{x:5,y:21},{x:5,y:26},{x:8,y:6},{x:8,y:21},{x:11,y:12},{x:11,y:15},{x:14,y:6},{x:14,y:9},{x:14,y:18},{x:14,y:21},{x:17,y:9},{x:17,y:18},{x:20,y:6},{x:20,y:9},{x:20,y:18},{x:20,y:21},{x:23,y:6},{x:23,y:9},{x:23,y:12},{x:23,y:15},{x:23,y:18},{x:23,y:21},{x:26,y:3},{x:26,y:24},{x:29,y:12},{x:29,y:15}
 ]
 
+// pass in ghost index & current direction
+function simpleAI(ghost, direction) {
+  var path1, path2
+  var possiblePaths = 0
+  var _ghost = ghosts[ghost]
+  var goingX = direction == -1 || direction == 1 // true if traveling on X-axis
+  var goingY = direction == -2 || direction == 2 // true if traveling on Y-axis
+
+  // if going in direction & hit a wall, see if up or down has a wall
+  // if only 1 path, take it. if 2 paths choose 1 at random
+
+  if (direction == -1) { // left
+    path1 = world[_ghost.y-1][_ghost.x] !== 2 // up
+    path2 = world[_ghost.y+1][_ghost.x] !== 2 // down
+  }
+
+  if (direction == -2) { // up
+    path1 = world[_ghost.y][_ghost.x-1] !== 2
+    path2 = world[_ghost.y][_ghost.x+1] !== 2
+  }
+
+  if (direction == 1) { // right
+    path1 = world[_ghost.y-1][_ghost.x] !== 2
+    path2 = world[_ghost.y+1][_ghost.x] !== 2
+  }
+
+  if (direction == 2) { // down
+    path1 = world[_ghost.y][_ghost.x-1] !== 2
+    path2 = world[_ghost.y][_ghost.x+1] !== 2
+  }
+
+  path1 ? possiblePaths++ : possiblePaths
+  path2 ? possiblePaths++ : possiblePaths
+
+  // check if current path is X or Y axis & check
+  // if path1(bool checking if path availible) is True,
+  // take that path, otherwise gen random # and take path
+  if (possiblePaths < 2) {
+    if (goingX) _ghost.direction = path1 ? -2 : 2
+    if (goingY) _ghost.direction = path1 ? -1 : 1
+  } else {
+    var random = Math.ceil(Math.random() * possiblePaths)
+    console.log('RANDOMMMM', random)
+    if (goingX) _ghost.direction = (random == 1) ? 2 : -2
+    if (goingY) _ghost.direction = (random == 1) ? 1 : -1
+  }
+}
+
 function moveGhosts() {
   var $ghost1 = $('.ghost-1')
   var ghost1 = ghosts[0]
@@ -243,82 +291,31 @@ function moveGhosts() {
   // NO WALL IN CURRENT DIRECTION
 
   if (ghost1.direction == -1 && world[ghost1.y][ghost1.x-1] !== 2) {
-    // console.log('moving left')
     ghost1.x--
   }
   else if (ghost1.direction == -2 && world[ghost1.y-1][ghost1.x] !== 2) {
-    // console.log('moving up')
     ghost1.y--
   }
   else if (ghost1.direction == 1 && world[ghost1.y][ghost1.x+1] !== 2) {
-    // console.log('moving right')
     ghost1.x++
   }
   else if (ghost1.direction == 2 && world[ghost1.y+1][ghost1.x] !== 2) {
-    // console.log('moving down')
     ghost1.y++
   }
 
   // HIT A WALL
 
   if (ghost1.direction == -1 && world[ghost1.y][ghost1.x-1] == 2) {
-    // console.log('HIT A WALL GOING LEFT')
-    var lup = world[ghost1.y-1][ghost1.x] !== 2
-    var ldown = world[ghost1.y+1][ghost1.x] !== 2
-    var possiblePaths = 0
-    lup ? possiblePaths++ : possiblePaths
-    ldown ? possiblePaths++ : possiblePaths
-
-    if (possiblePaths < 2) {
-      // if lup==true set direction=-2, else direction=2
-      ghost1.direction = lup ? -2 : 2
-    } else {
-      var random = Math.ceil(Math.random() * possiblePaths)
-      ghost1.direction = (random == 1) ? 2 : -2
-    }
+    simpleAI(0, -1)
   }
   else if (ghost1.direction == -2 && world[ghost1.y-1][ghost1.x] == 2) {
-    // console.log('HIT A WALL GOING UP')
-    var dleft = world[ghost1.y][ghost1.x-1] !== 2
-    var dright = world[ghost1.y][ghost1.x+1] !== 2
-    var possiblePaths = 0
-    dleft ? possiblePaths++ : possiblePaths
-    dright ? possiblePaths++ : possiblePaths
-
-    if (possiblePaths < 2) {
-      ghost1.direction = dleft ? -1 : 1
-    } else {
-      var random = Math.ceil(Math.random() * possiblePaths)
-      ghost1.direction = (random == 1) ? -1 : 1
-    }
+    simpleAI(0, -2)
   }
   else if (ghost1.direction == 1 && world[ghost1.y][ghost1.x+1] == 2) {
-    var lup = world[ghost1.y-1][ghost1.x] !== 2
-    var ldown = world[ghost1.y+1][ghost1.x] !== 2
-    var possiblePaths = 0
-    lup ? possiblePaths++ : possiblePaths
-    ldown ? possiblePaths++ : possiblePaths
-
-    if (possiblePaths < 2) {
-      ghost1.direction = lup ? -2 : 2
-    } else {
-     var random = Math.ceil(Math.random() * possiblePaths)
-     ghost1.direction = (random == 1) ? -2 : 2
-    }
+    simpleAI(0, 1)
   }
   else if (ghost1.direction == 2 && world[ghost1.y+1][ghost1.x] == 2) {
-    var dleft = world[ghost1.y][ghost1.x-1] !== 2
-    var dright = world[ghost1.y][ghost1.x+1] !== 2
-    var possiblePaths = 0
-    dleft ? possiblePaths++ : possiblePaths
-    dright ? possiblePaths++ : possiblePaths
-
-    if (possiblePaths < 2) {
-      ghost1.direction = dleft ? -1 : 1
-    } else {
-      var random = Math.ceil(Math.random() * possiblePaths)
-      ghost1.direction = (random == 1) ? -1 : 1
-    }
+    simpleAI(0, 2)
   }
 
   displayGhosts()
