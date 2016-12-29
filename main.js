@@ -98,8 +98,8 @@ var pacman = {
 var ghosts = {
   '0': { // pink
     x:          13,
-    y:          13,
-    direction:  0,
+    y:          11,
+    direction:  -1,
     chase:      false,
     scatter:    false,
     frightened: false
@@ -167,10 +167,10 @@ function displayWorld() {
     }
     output += '\n</div>' // close div.row
   }
-  console.dir(inflectionPts)
-  for (var inf in inflectionPts) {
-    console.log(inflectionPts[inf])
-  }
+  // console.dir(inflectionPts)
+  // for (var inf in inflectionPts) {
+  //   console.log(inflectionPts[inf])
+  // }
   $('#world').html(output)
 }
 
@@ -224,15 +224,58 @@ function moveGhosts() {
   var $ghost1 = $('.ghost-1')
   var ghost1 = ghosts[0]
 
-  if (ghost1.y > 11) {
-    ghost1.y -= 1
+  // var distFromPacman = getDistanceToTile(ghost1, pacman)
+  // ghost1.direction = -1
+
+  // SMOOTH SAILING
+
+  if (ghost1.direction == -1 && world[ghost1.y][ghost1.x-1] !== 2) {
+    console.log('moving left')
+    ghost1.x--
   }
-  else if (ghost1.y == 11) {
-    // get number of tiles x & y to get to destination tile
-    var distFromPacman = getDistanceToTile(ghost1, pacman)
-    console.log('tile dist from pacman!!!', distFromPacman)
+  else if (ghost1.direction == -2 && world[ghost1.y-1][ghost1.x] !== 2) {
+    console.log('moving up')
+    ghost1.y--
+  }
+  else if (ghost1.direction == 1 && world[ghost1.y][ghost1.x+1] !== 2) {
+    console.log('moving right')
+    ghost1.x++
+  }
+  else if (ghost1.direction == 2 && world[ghost1.y+1][ghost1.x] !== 2) {
+    console.log('moving down')
+    ghost1.y++
   }
 
+  // HIT A WALL
+
+  if (ghost1.direction == -1 && world[ghost1.y][ghost1.x-1] == 2) {
+    console.log('HIT A WALL GOING LEFT')
+    var lup = world[ghost1.y-1][ghost1.x] !== 2
+    var ldown = world[ghost1.y+1][ghost1.x] !== 2
+    var possiblePaths = 0
+    lup ? possiblePaths++ : possiblePaths
+    ldown ? possiblePaths++ : possiblePaths
+    console.log('possible paths: ', possiblePaths)
+    // logic for if there is more than 1 path goes here
+
+    if (lup) {
+      ghost1.direction = -2
+    }
+    if (ldown) {
+      ghost1.direction = 2
+    }
+  }
+  else if (ghost1.direction == -2 && world[ghost1.y-1][ghost1.x] == 2) {
+    console.log('HIT A WALL GOING UP')
+  }
+  else if (ghost1.direction == 1 && world[ghost1.y][ghost1.x+1] == 2) {
+    console.log('HIT A WALL GOING RIGHT')
+  }
+  else if (ghost1.direction == 2 && world[ghost1.y+1][ghost1.x] == 2) {
+    console.log('HIT A WALL GOING DOWN')
+  }
+
+  console.log(ghost1)
   displayGhosts()
 }
 
@@ -317,7 +360,7 @@ displayPacman()
 displayGhosts()
 displayScore()
 
-// var _tick = setInterval(gameTick, 300)
+var _tick = setInterval(gameTick, 300)
 var _time = setInterval(showTime, 1000)
 
 
