@@ -12,10 +12,30 @@ var game = {
 
     if (game.level == 0) {
       console.log('hello game level 0')
-      $('#meta, #pacman, .ghost').hide()
+      // $('#meta, #pacman, .ghost').hide()
+
     }
 
     if (game.level == 1) {
+      var gameDOM = `
+        <div id="container">
+          <div id="world"></div>
+          <div id="meta">
+            <div id="score">
+              Score <span class="game-score">0</span>
+            </div>
+            Time <div id="time">0</div>
+          </div>
+          <div id="pacman"></div>
+          <div class="ghost ghost-0"></div>
+          <div class="ghost ghost-1"></div>
+          <div class="ghost ghost-2"></div>
+          <div class="ghost ghost-3"></div>
+        </div>
+      `
+
+      $('body').html(gameDOM)
+
       game.displayWorld()
       game.displayScore()
       pacman.displayPacman()
@@ -241,9 +261,10 @@ var ghosts = {
     var g1 = ghosts.ghosts[0], g2 = ghosts.ghosts[1]
         g3 = ghosts.ghosts[2], g4 = ghosts.ghosts[3]
 
+    // increase the ghost iter every gameTick, which is used
+    // in releaseGhosts to trigger ghosts to come out at diff times
     ghosts.iter++
 
-    // console.log(ghosts)
     if (ghosts.iter == 9) {
       g1.active = true
       g1.y -= g1.toGetOut
@@ -391,20 +412,23 @@ var ghosts = {
 
 
 
-game.init()
+$(function() {
+  game.init()
 
-$(document).keydown(function(e) {
-  // update pacmans current direction based on key pressed
-  if (e.keyCode == 37) {
-    pacman.direction = -1
-  }
-  if (e.keyCode == 38) {
-    pacman.direction = -2
-  }
-  if (e.keyCode == 39) {
-    pacman.direction = 1
-  }
-  if (e.keyCode == 40) {
-    pacman.direction = 2
-  }
+  $(document).keydown(function(e) {
+    // update pacmans current direction based on key pressed
+    if (e.keyCode == 37) {
+      pacman.direction = -1
+    }
+    if (e.keyCode == 38) {
+      pacman.direction = -2
+    }
+    if (e.keyCode == 39) {
+      pacman.direction = 1
+    }
+    if (e.keyCode == 40) {
+      pacman.direction = 2
+    }
+  })
+
 })

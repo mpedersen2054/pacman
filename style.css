@@ -57,6 +57,8 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+  transition: left 0.3s linear,
+              top 0.3s linear;
 }
 
 #meta {
@@ -103,6 +105,8 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+  transition: left 0.3s linear,
+              top 0.3s linear;
 }
 .ghost-0 {
   background-image: url('images/ghost0.gif');
