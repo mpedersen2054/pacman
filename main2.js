@@ -246,20 +246,29 @@ var ghosts = {
     // console.log(ghosts)
     if (ghosts.iter == 9) {
       g1.active = true
-      g1.y -= g1.getOut
+      g1.y -= g1.toGetOut
       g1.direction = -1
       ghosts.activeGhosts.push(g1)
     }
     if (ghosts.iter == 27) {
-      ghosts.activeGhosts.push(g1)
+      g2.active = true
+      g2.y -= g2.toGetOut
+      g2.direction = 1
+      ghosts.activeGhosts.push(g2)
     }
 
     if (ghosts.iter == 45) {
-      ghosts.activeGhosts.push(g1)
+      g3.active = true
+      g3.y -= g1.toGetOut
+      g3.direction = -1
+      ghosts.activeGhosts.push(g3)
     }
 
     if (ghosts.iter == 60) {
-      ghosts.activeGhosts.push(g1)
+      g4.active = true
+      g4.y -= g4.toGetOut
+      g4.direction = 1
+      ghosts.activeGhosts.push(g4)
     }
 
     console.log('ACTIVE GHOSTS:  ', ghosts.activeGhosts)
@@ -274,32 +283,32 @@ var ghosts = {
     for (var i = 0; i < ghosts.activeGhosts.length; i++) {
       var ghost = ghosts.activeGhosts[i]
 
-      if (ghost1.direction == -1 && world[ghost1.y][ghost1.x-1] !== 2) {
-        ghost1.x--
+      if (ghost.direction == -1 && world[ghost.y][ghost.x-1] !== 2) {
+        ghost.x--
       }
-      else if (ghost1.direction == -2 && world[ghost1.y-1][ghost1.x] !== 2) {
-        ghost1.y--
+      else if (ghost.direction == -2 && world[ghost.y-1][ghost.x] !== 2) {
+        ghost.y--
       }
-      else if (ghost1.direction == 1 && world[ghost1.y][ghost1.x+1] !== 2) {
-        ghost1.x++
+      else if (ghost.direction == 1 && world[ghost.y][ghost.x+1] !== 2) {
+        ghost.x++
       }
-      else if (ghost1.direction == 2 && world[ghost1.y+1][ghost1.x] !== 2) {
-        ghost1.y++
+      else if (ghost.direction == 2 && world[ghost.y+1][ghost.x] !== 2) {
+        ghost.y++
       }
 
 
       // if the ghost hit a wall
-      if (ghost1.direction == -1 && world[ghost1.y][ghost1.x-1] == 2) {
-        ghosts.simpleAI(0, -1)
+      if (ghost.direction == -1 && world[ghost.y][ghost.x-1] == 2) {
+        ghosts.simpleAI(i, -1)
       }
-      else if (ghost1.direction == -2 && world[ghost1.y-1][ghost1.x] == 2) {
-        ghosts.simpleAI(0, -2)
+      else if (ghost.direction == -2 && world[ghost.y-1][ghost.x] == 2) {
+        ghosts.simpleAI(i, -2)
       }
-      else if (ghost1.direction == 1 && world[ghost1.y][ghost1.x+1] == 2) {
-        ghosts.simpleAI(0, 1)
+      else if (ghost.direction == 1 && world[ghost.y][ghost.x+1] == 2) {
+        ghosts.simpleAI(i, 1)
       }
-      else if (ghost1.direction == 2 && world[ghost1.y+1][ghost1.x] == 2) {
-        ghosts.simpleAI(0, 2)
+      else if (ghost.direction == 2 && world[ghost.y+1][ghost.x] == 2) {
+        ghosts.simpleAI(i, 2)
       }
 
       // checkCollision twice? because if they are heading towards
