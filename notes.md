@@ -80,3 +80,27 @@ inflection pts ( where ghosts make decisions )
   {x:29,y:12},
   {x:29,y:15}
 ]
+
+
+GAME
+init (displayWord(), displayPacman(), displayGhosts(), displayScore)
+gameOver()
+checkIfCollision(pacmanCoords, ghost1Coords)
+gameTick()
+showTime()
+displayScore()
+displayWord()
+
+PACMAN
+updateBGDirection()
+movePacman(keyCode)
+displayPacman()
+
+GHOSTS
+getDistanceToTile()
+moveGhosts()
+simpleAI(ghost, direction)
+displayGhosts()
+
+
+? inflecionPts

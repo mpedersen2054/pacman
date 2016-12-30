@@ -55,6 +55,7 @@ var ghosts = {
 FUNCTIONS
  */
 
+// === GAME
 function displayWorld() {
   var output = ''
   var inflectionPts = []
@@ -92,6 +93,7 @@ function displayWorld() {
   $('#world').html(output)
 }
 
+// === PACMAN
 function displayPacman() {
   var $pacman = $('#pacman')
   updateBGDirection() // rotates bg-img based pacman.direction
@@ -99,6 +101,7 @@ function displayPacman() {
   $pacman.css({'left': `${pacman.x * 20}px`})
 }
 
+// === GHOSTS
 function displayGhosts() {
   // console.log(ghosts['0'])
   $('.ghost-0').css({'top': `${ghosts['0'].y * 20}px`})
@@ -115,11 +118,12 @@ function displayGhosts() {
 }
 
 
-
+// === GAME
 function displayScore() {
   $('.game-score').html(pacman.score)
 }
 
+// === GAME
 // only used to show the time, the gameTick is
 // every 3milli, we want this to show every sec
 var time = 0
@@ -128,6 +132,7 @@ function showTime() {
   $('#time').html(time)
 }
 
+// === GAME
 // updates the game every 3 milliseconds
 function gameTick() {
   checkIfCollision(pacman,ghosts[0])
@@ -136,26 +141,8 @@ function gameTick() {
   checkIfCollision(pacman,ghosts[0])
 }
 
+// === GAME
 function checkIfCollision(pacmanCoords, ghost1Coords) {
-
-  // pac L -> g1 R ::: WORKED
-  // pac R -> g1 L ::: WORKED
-  // pac T -> g1 B ::: WORKED
-  // pac B -> g1 T ::: WORKED : sorta, endgame ended w pacman x=14 ghost1 x=13
-  // var px = $('#pacman').css('left')
-  // var py = $('#pacman').css('top')
-  // var gx = $('.ghost-1').css('left')
-  // var gy = $('.ghost-1').css('top')
-
-  // console.log(px, py, 'pacman')
-  // console.log(gx, gy, 'ghost')
-
-  // if ((px == gx && py == gy) || (py == gy && px == gx)) {
-  //     clearInterval(_tick)
-  //     clearInterval(_time)
-  //     gameOver()
-  // }
-
   if (pacmanCoords.x == ghost1Coords.x && pacmanCoords.y == ghost1Coords.y) {
     clearInterval(_tick)
     clearInterval(_time)
@@ -169,10 +156,12 @@ function checkIfCollision(pacmanCoords, ghost1Coords) {
   }
 }
 
+// === GHOSTS
 // SEE NOTES.MD FOR GHOST LOGIC
 var inflectionPts = [{x:1,y:6},{x:1,y:21},{x:5,y:1},{x:5,y:6},{x:5,y:9},{x:5,y:12},{x:5,y:15},{x:5,y:18},{x:5,y:21},{x:5,y:26},{x:8,y:6},{x:8,y:21},{x:11,y:12},{x:11,y:15},{x:14,y:6},{x:14,y:9},{x:14,y:18},{x:14,y:21},{x:17,y:9},{x:17,y:18},{x:20,y:6},{x:20,y:9},{x:20,y:18},{x:20,y:21},{x:23,y:6},{x:23,y:9},{x:23,y:12},{x:23,y:15},{x:23,y:18},{x:23,y:21},{x:26,y:3},{x:26,y:24},{x:29,y:12},{x:29,y:15}
 ]
 
+// === GHOSTS
 // pass in ghost index & current direction
 function simpleAI(ghost, direction) {
   var path1, path2
@@ -221,6 +210,7 @@ function simpleAI(ghost, direction) {
   }
 }
 
+// === GHOSTS
 function moveGhosts() {
   var $ghost1 = $('.ghost-1')
   var ghost1 = ghosts[0]
@@ -263,6 +253,7 @@ function moveGhosts() {
   // checkIfCollision(pacman,ghosts[0])
 }
 
+// === GHOSTS
 function getDistanceToTile(currTile, destTile) {
   var xDist, yDist
 
@@ -278,6 +269,7 @@ function getDistanceToTile(currTile, destTile) {
   return xDist + yDist
 }
 
+// === PACMAN
 function movePacman(keyCode) {
 
   // check if pacman is running into a well, if not move him in the direction hes going
@@ -312,6 +304,7 @@ function movePacman(keyCode) {
   // checkIfCollision(pacman,ghosts[0])
 }
 
+// === PACMAN
 // rotate #pacman bg-img based on pacman.direction
 function updateBGDirection() {
   var $pacman = $('#pacman')
@@ -342,14 +335,16 @@ function updateBGDirection() {
   }
 }
 
+// === GAME
 function gameOver() {
-  $('#meta').append(`<h5>GAME OVER!</h5>`)
+  $('#meta').html(`<h5>GAME OVER!</h5>`)
   // clearInterval(_tick)
   // clearInterval(_time)
 }
 
 
 
+// SHOULD BE IN GAME.INIT
 displayWorld()
 displayPacman()
 displayGhosts()
