@@ -3,53 +3,7 @@
 //
 // var _tick, _time
 
-var game = {
-  level: 1,
-  speed: 200,
-  lifes: 1
-}
 
-var pacman = {
-  x: 1,
-  y: 1,
-  direction: 0, // -1=left, -2=up, 1=right, 2=down
-  score: 0
-}
-
-var ghosts = {
-  '0': { // pink
-    x:          13,
-    y:          11,
-    direction:  -1,
-    chase:      false,
-    scatter:    false,
-    frightened: false
-  },
-  '1': { // orange
-    x:          14,
-    y:          13,
-    direction:  0,
-    chase:      false,
-    scatter:    false,
-    frightened: false
-  },
-  2: { // blue
-    x:          13,
-    y:          14,
-    direction:  0,
-    chase:      false,
-    scatter:    false,
-    frightened: false
-  },
-  3: { // red
-    x:          14,
-    y:          14,
-    direction:  0,
-    chase:      false,
-    scatter:    false,
-    frightened: false
-  }
-}
 
 /*
 FUNCTIONS
@@ -368,5 +322,4 @@ $(document).keydown(function(e) {
   if (e.keyCode == 40) {
     pacman.direction = 2
   }
-
 })

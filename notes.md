@@ -83,13 +83,24 @@ inflection pts ( where ghosts make decisions )
 
 
 GAME
-init (displayWord(), displayPacman(), displayGhosts(), displayScore)
-gameOver()
-checkIfCollision(pacmanCoords, ghost1Coords)
-gameTick()
+init (
+  setInterval(gameTick), setInterval(showTime)
+  displayWord(), displayPacman(), displayGhosts(), displayScore()
+)
+gameTick(
+  checkIfCollions()
+  movePacman()
+  moveGhosts()
+)
+
+displayWorld()
+
 showTime()
 displayScore()
-displayWord()
+gameOver()
+checkIfCollision(pacmanCoords, ghost1Coords)
+
+
 
 PACMAN
 updateBGDirection()
