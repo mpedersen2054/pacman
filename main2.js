@@ -17,7 +17,6 @@ var game = {
   highestLevelAchieved: null,
   scoreToWin: null,
   speed: 300,
-  // lives: 3,
   time: 0,
   // set in this.init()
   gameTickInterval: null,
@@ -27,42 +26,17 @@ var game = {
 
     // GAME OVER SCREEN
     if (game.level == -2) {
-      var endgameDOM = `
-        <div id="endgame-screen">
-          <h1>Nice Try! Game Over!</h1>
-          <p>You got to level ${game.highestLevelAchieved}!</p>
-          <p>You collected a total of ${pacman.score} coins!</p>
-          <p>refresh the browser window to play again...</p>
-        </div>
-      `
-      $('body').html(endgameDOM)
+      $('body').html(templates.endgameScreen(game.highestLevelAchieved, pacman.score))
     }
 
+    // INTERMEDIATE SCREEN (inbetween levels)
     if (game.level == -1) {
-      var intermediateScreen = `
-        <div id="intermediate-screen">
-          <h1>Congratulations!</h1>
-          <p>You beat level ${game.highestLevelAchieved}</p>
-          <p>There is only 1 level for now, lol.</p>
-          <p>The button below is supposed to send you to the next level, once I implement it...</p>
-          <div class="next-level-btn">Next level</div>
-        </div>
-      `
-      $('body').html(intermediateScreen)
+      $('body').html(templates.intermediateScreen(game.highestLevelAchieved))
     }
 
     // START SCREEN
     if (game.level == 0) {
-      var startScreenDOM = `
-        <div id="start-screen">
-          <div class="first-row">
-            <img src="images/animated_pacman.gif" alt="">
-            <h1>Pacman</h1>
-          </div>
-          <div class="start-btn">Play!</div>
-        </div>
-      `
-      $('body').html(startScreenDOM)
+      $('body').html(templates.startScreen())
       $('.start-btn').on('click', function() {
         game.level++
         game.init()
@@ -71,31 +45,7 @@ var game = {
 
     // LEVEL 1
     if (game.level == 1) {
-      var gameDOM = `
-        <div id="container">
-          <div id="world"></div>
-          <div id="meta">
-            <div id="level">
-              Level <span class="game-level">1</span>
-            </div>
-            <div id="score">
-              Score <span class="game-score">0</span>
-            </div>
-            <div id="time">
-              Time <span class="game-time">0</span>
-            </div>
-            <div id="lives">
-              Lives <ul class="game-lives"></ul>
-            </div>
-          </div>
-          <div id="pacman"></div>
-          <div class="ghost ghost-0"></div>
-          <div class="ghost ghost-1"></div>
-          <div class="ghost ghost-2"></div>
-          <div class="ghost ghost-3"></div>
-        </div>
-      `
-      $('body').html(gameDOM)
+      $('body').html(templates.level1())
 
       // for each life pacman has append a
       // .live onto .game-lives
@@ -108,8 +58,7 @@ var game = {
       // to show on endgame-screen
       game.highestLevelAchieved = 1
 
-      // initialize displaying world, score
-      // pacman & ghosts
+      // initialize the game
       game.displayWorld()
       game.displayScore()
       pacman.displayPacman()
@@ -123,9 +72,7 @@ var game = {
   },
 
   gameTick: function() {
-
     game.checkIfWin()
-
     game.checkIfCollision()
     pacman.movePacman()
     ghosts.releaseGhosts()
@@ -175,8 +122,9 @@ var game = {
       output += '\n</div>' // close div.row
     }
 
+    // wont work if theres more than 1 levels
     if (!game.scoreToWin) game.scoreToWin = coinsNum * 10 // each coin 10 pts
-    // game.scoreToWin = !game.scoreToWin ? coinsNum*10 : game.scoreToWin
+
     $('#world').html(output)
   },
 
@@ -209,12 +157,9 @@ var game = {
     }
     // if no more lives left, show endgame-screen
     else {
-      // console.log('END GAMEEEEE')
       game.level = -2
       game.init()
     }
-
-    // $('#meta').html(`<h5>GAME OVER!</h5>`)
   },
 
   checkIfWin: function() {
@@ -479,7 +424,6 @@ var ghosts = {
   },
 
   simpleAI: function(ghost, direction) {
-    // console.log('hello simpleAI')
     var path1, path2
     var possiblePaths = 0
     var _ghost = ghosts.ghosts[ghost]
@@ -520,10 +464,70 @@ var ghosts = {
       if (goingY) _ghost.direction = path1 ? -1 : 1
     } else {
       var random = Math.ceil(Math.random() * possiblePaths)
-      // console.log('RANDOMMMM', random)
       if (goingX) _ghost.direction = (random == 1) ? 2 : -2
       if (goingY) _ghost.direction = (random == 1) ? 1 : -1
     }
+  }
+}
+
+var templates = {
+  startScreen: function() {
+    return `
+      <div id="start-screen">
+        <div class="first-row">
+          <img src="images/animated_pacman.gif" alt="">
+          <h1>Pacman</h1>
+        </div>
+        <div class="start-btn">Play!</div>
+      </div>
+    `
+  },
+  intermediateScreen: function(highestLevel) {
+    return `
+      <div id="intermediate-screen">
+        <h1>Congratulations!</h1>
+        <p>You beat level ${highestLevel}</p>
+        <p>There is only 1 level for now, lol.</p>
+        <p>The button below is supposed to send you to the next level, once I implement it...</p>
+        <div class="next-level-btn">Next level</div>
+      </div>
+    `
+  },
+  endgameScreen: function(highestLevel, score) {
+    return `
+      <div id="endgame-screen">
+        <h1>Nice Try! Game Over!</h1>
+        <p>You got to level ${highestLevel}!</p>
+        <p>You collected a total of ${score} coins!</p>
+        <p>refresh the browser window to play again...</p>
+      </div>
+    `
+  },
+  level1: function() {
+    return `
+      <div id="container">
+        <div id="world"></div>
+        <div id="meta">
+          <div id="level">
+            Level <span class="game-level">1</span>
+          </div>
+          <div id="score">
+            Score <span class="game-score">0</span>
+          </div>
+          <div id="time">
+            Time <span class="game-time">0</span>
+          </div>
+          <div id="lives">
+            Lives <ul class="game-lives"></ul>
+          </div>
+        </div>
+        <div id="pacman"></div>
+        <div class="ghost ghost-0"></div>
+        <div class="ghost ghost-1"></div>
+        <div class="ghost ghost-2"></div>
+        <div class="ghost ghost-3"></div>
+      </div>
+    `
   }
 }
 
