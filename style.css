@@ -5,7 +5,7 @@ body {
   // font-family: 'Indie Flower', cursive;
 }
 
-#start-screen {
+#start-screen, #endgame-screen {
   background-color: #000;
   color: #fff;
   width: 100%;

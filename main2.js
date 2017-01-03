@@ -14,6 +14,7 @@ TODO:
 
 var game = {
   level: 0,
+  highestLevelAchieved: null,
   speed: 300,
   // lives: 3,
   time: 0,
@@ -22,6 +23,19 @@ var game = {
   gameTimeInterval: null,
 
   init: function() {
+
+    // GAME OVER SCREEN
+    if (game.level == -2) {
+      var endgameDOM = `
+        <div id="endgame-screen">
+          <h1>Nice Try! Game Over!</h1>
+          <p>You got to level ${game.highestLevelAchieved}!</p>
+          <p>You collected a total of ${pacman.score} coins!</p>
+          <p>refresh the browser window to play again...</p>
+        </div>
+      `
+      $('body').html(endgameDOM)
+    }
 
     // START SCREEN
     if (game.level == 0) {
@@ -67,20 +81,24 @@ var game = {
           <div class="ghost ghost-3"></div>
         </div>
       `
-
       $('body').html(gameDOM)
 
+      // for each life pacman has append a
+      // .live onto .game-lives
       var lives = ''
       for (var i = 0; i < pacman.lives; i++) {
         lives += `<li class="live"></li>`
       }
       $('.game-lives').append(lives)
 
+      // initialize displaying world, score
+      // pacman & ghosts
       game.displayWorld()
       game.displayScore()
       pacman.displayPacman()
       ghosts.displayGhosts()
 
+      // set the intervals for the game.time and .3 millisecond game tick
       game.gameTickInterval = setInterval(game.gameTick, game.speed)
       game.gameTimeInterval = setInterval(game.showTime, 1000)
     }
@@ -140,6 +158,8 @@ var game = {
   death: function() {
     var aa = $('#container').html()
 
+    // when pacman dies & he still has more than 1 life left
+    // reset pacman & ghosts to starting pos and start game again
     if (pacman.lives > 1) {
       pacman.lives--
       pacman.x = 1
@@ -165,6 +185,9 @@ var game = {
     }
     else {
       console.log('END GAMEEEEE')
+      game.highestLevelAchieved = game.level
+      game.level = -2
+      game.init()
     }
 
     // $('#meta').html(`<h5>GAME OVER!</h5>`)
@@ -193,7 +216,7 @@ var pacman = {
   y: 1,
   direction: 0, // -1=left, -2=up, 1=right, 2=down
   score: 0,
-  lives: 3,
+  lives: 2,
 
   displayPacman: function() {
     var $pacman = $('#pacman')
