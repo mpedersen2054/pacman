@@ -5,7 +5,7 @@ body {
   // font-family: 'Indie Flower', cursive;
 }
 
-#start-screen, #endgame-screen {
+#start-screen, #endgame-screen, #intermediate-screen {
   background-color: #000;
   color: #fff;
   width: 100%;
@@ -46,8 +46,17 @@ body {
   margin-left: 240px;
 }
 
-.start-btn:hover {
+.start-btn:hover, .next-level-btn:hover {
   background-color: blue;
+}
+
+.next-level-btn {
+  border: 1px solid blue;
+  padding: 10px 20px;
+  border-radius: 6px;
+  width: 160px;
+  text-align: center;
+  cursor: pointer;
 }
 
 #container {

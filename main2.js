@@ -15,6 +15,7 @@ TODO:
 var game = {
   level: 0,
   highestLevelAchieved: null,
+  scoreToWin: null,
   speed: 300,
   // lives: 3,
   time: 0,
@@ -35,6 +36,19 @@ var game = {
         </div>
       `
       $('body').html(endgameDOM)
+    }
+
+    if (game.level == -1) {
+      var intermediateScreen = `
+        <div id="intermediate-screen">
+          <h1>Congratulations!</h1>
+          <p>You beat level ${game.highestLevelAchieved}</p>
+          <p>There is only 1 level for now, lol.</p>
+          <p>The button below is supposed to send you to the next level, once I implement it...</p>
+          <div class="next-level-btn">Next level</div>
+        </div>
+      `
+      $('body').html(intermediateScreen)
     }
 
     // START SCREEN
@@ -91,6 +105,9 @@ var game = {
       }
       $('.game-lives').append(lives)
 
+      // to show on endgame-screen
+      game.highestLevelAchieved = 1
+
       // initialize displaying world, score
       // pacman & ghosts
       game.displayWorld()
@@ -106,6 +123,9 @@ var game = {
   },
 
   gameTick: function() {
+
+    game.checkIfWin()
+
     game.checkIfCollision()
     pacman.movePacman()
     ghosts.releaseGhosts()
@@ -122,6 +142,7 @@ var game = {
 
   displayWorld: function() {
     var output = ''
+    var coinsNum = 0
 
     // each arr inside world arr
     for (var i = 0; i < world.length; i++) {
@@ -145,6 +166,7 @@ var game = {
         }
         else if (world[i][j] == 1) {
           output += '\n\t<div class="coin"></div>'
+          coinsNum++
         }
         else if (world[i][j] == 0) {
           output += '\n\t<div class="empty"></div>'
@@ -152,12 +174,14 @@ var game = {
       }
       output += '\n</div>' // close div.row
     }
+
+    if (!game.scoreToWin) game.scoreToWin = coinsNum * 10 // each coin 10 pts
+    // game.scoreToWin = !game.scoreToWin ? coinsNum*10 : game.scoreToWin
     $('#world').html(output)
   },
 
   death: function() {
-    var aa = $('#container').html()
-
+    console.log(game.scoreToWin)
     // when pacman dies & he still has more than 1 life left
     // reset pacman & ghosts to starting pos and start game again
     if (pacman.lives > 1) {
@@ -183,14 +207,25 @@ var game = {
 
       game.init()
     }
+    // if no more lives left, show endgame-screen
     else {
-      console.log('END GAMEEEEE')
-      game.highestLevelAchieved = game.level
+      // console.log('END GAMEEEEE')
       game.level = -2
       game.init()
     }
 
     // $('#meta').html(`<h5>GAME OVER!</h5>`)
+  },
+
+  checkIfWin: function() {
+    console.log('checking if won!!!')
+    if (pacman.score == 200) {
+      clearInterval(game.gameTickInterval)
+      clearInterval(game.gameTimeInterval)
+
+      game.level = -1
+      game.init()
+    }
   },
 
   checkIfCollision: function(pacmanCoords, ghostCoords) {
@@ -385,7 +420,7 @@ var ghosts = {
       ghosts.activeGhosts.push(g4)
     }
 
-    console.log('ACTIVE GHOSTS:  ', ghosts.activeGhosts)
+    // console.log('ACTIVE GHOSTS:  ', ghosts.activeGhosts)
 
     ghosts.moveGhosts()
   },
@@ -485,7 +520,7 @@ var ghosts = {
       if (goingY) _ghost.direction = path1 ? -1 : 1
     } else {
       var random = Math.ceil(Math.random() * possiblePaths)
-      console.log('RANDOMMMM', random)
+      // console.log('RANDOMMMM', random)
       if (goingX) _ghost.direction = (random == 1) ? 2 : -2
       if (goingY) _ghost.direction = (random == 1) ? 1 : -1
     }
