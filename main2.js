@@ -1,8 +1,21 @@
 
+/*
+
+TODO:
+1) make collision work for all ghosts
+2) prog pacman lives feature (3 lives...)
+3) prog make play again and next level screen
+4) prog make gameover screen
+5) style all intermediary screens
+6) make eating big coin make ghosts frightened
+9000) pac MANE?
+
+ */
+
 var game = {
-  level: 1,
+  level: 0,
   speed: 300,
-  lifes: 1,
+  // lives: 3,
   time: 0,
   // set in this.init()
   gameTickInterval: null,
@@ -10,21 +23,42 @@ var game = {
 
   init: function() {
 
+    // START SCREEN
     if (game.level == 0) {
-      console.log('hello game level 0')
-      // $('#meta, #pacman, .ghost').hide()
-
+      var startScreenDOM = `
+        <div id="start-screen">
+          <div class="first-row">
+            <img src="images/animated_pacman.gif" alt="">
+            <h1>Pacman</h1>
+          </div>
+          <div class="start-btn">Play!</div>
+        </div>
+      `
+      $('body').html(startScreenDOM)
+      $('.start-btn').on('click', function() {
+        game.level++
+        game.init()
+      })
     }
 
+    // LEVEL 1
     if (game.level == 1) {
       var gameDOM = `
         <div id="container">
           <div id="world"></div>
           <div id="meta">
+            <div id="level">
+              Level <span class="game-level">1</span>
+            </div>
             <div id="score">
               Score <span class="game-score">0</span>
             </div>
-            Time <div id="time">0</div>
+            <div id="time">
+              Time <span class="game-time">0</span>
+            </div>
+            <div id="lives">
+              Lives <ul class="game-lives"></ul>
+            </div>
           </div>
           <div id="pacman"></div>
           <div class="ghost ghost-0"></div>
@@ -35,6 +69,12 @@ var game = {
       `
 
       $('body').html(gameDOM)
+
+      var lives = ''
+      for (var i = 0; i < pacman.lives; i++) {
+        lives += `<li class="live"></li>`
+      }
+      $('.game-lives').append(lives)
 
       game.displayWorld()
       game.displayScore()
@@ -55,7 +95,7 @@ var game = {
 
   showTime: function() {
     game.time++
-    $('#time').html(game.time)
+    $('.game-time').html(game.time)
   },
 
   displayScore: function() {
@@ -97,25 +137,54 @@ var game = {
     $('#world').html(output)
   },
 
-  gameOver: function() {
-    $('#meta').html(`<h5>GAME OVER!</h5>`)
+  death: function() {
+    var aa = $('#container').html()
+
+    if (pacman.lives > 1) {
+      pacman.lives--
+      pacman.x = 1
+      pacman.y = 1
+
+      pacman.direction = 0
+
+      ghosts.iter = 0
+      ghosts.ghosts[0].x = 13
+      ghosts.ghosts[0].y = 13
+
+      ghosts.ghosts[1].x = 13
+      ghosts.ghosts[1].y = 14
+
+      ghosts.ghosts[2].x = 14
+      ghosts.ghosts[2].y = 13
+
+      ghosts.ghosts[3].x = 14
+      ghosts.ghosts[3].y = 14
+      ghosts.activeGhosts = []
+
+      game.init()
+    }
+    else {
+      console.log('END GAMEEEEE')
+    }
+
+    // $('#meta').html(`<h5>GAME OVER!</h5>`)
   },
 
-  checkIfCollision: function() {
+  checkIfCollision: function(pacmanCoords, ghostCoords) {
     var pacmanCoords = pacman
     var ghost1Coords = ghosts.ghosts['0']
 
     if (pacmanCoords.x == ghost1Coords.x && pacmanCoords.y == ghost1Coords.y) {
       clearInterval(game.gameTickInterval)
       clearInterval(game.gameTimeInterval)
-      game.gameOver()
+      game.death()
     }
 
-    if (ghost1Coords.x == pacman.x && ghost1Coords.y == pacman.y) {
-      clearInterval(game.gameTickInterval)
-      clearInterval(game.gameTimeInterval)
-      game.gameOver()
-    }
+    // if (ghost1Coords.x == pacman.x && ghost1Coords.y == pacman.y) {
+    //   clearInterval(game.gameTickInterval)
+    //   clearInterval(game.gameTimeInterval)
+    //   game.death()
+    // }
   }
 }
 
@@ -124,6 +193,7 @@ var pacman = {
   y: 1,
   direction: 0, // -1=left, -2=up, 1=right, 2=down
   score: 0,
+  lives: 3,
 
   displayPacman: function() {
     var $pacman = $('#pacman')
@@ -298,9 +368,6 @@ var ghosts = {
   },
 
   moveGhosts: function() {
-    console.log('hello moveGhosts')
-    var $ghost1 = $('.ghost-1')
-
     for (var i = 0; i < ghosts.activeGhosts.length; i++) {
       var ghost = ghosts.activeGhosts[i]
 
@@ -334,18 +401,12 @@ var ghosts = {
 
       // checkCollision twice? because if they are heading towards
       // each other sometimes they jump over the other and it skips setting off cIC
-      game.checkIfCollision(pacman,ghosts[0])
+      game.checkIfCollision(pacman,ghost)
       ghosts.displayGhosts()
-
-
     }
-
-    // NO WALL IN CURRENT DIRECTION
-    // game.checkIfCollision(pacman,ghosts[0])
   },
 
   getDistanceToTile: function(currTile, destTile) {
-    // console.log('hello getDistanceToTile')
     var xDist, yDist
 
     if (destTile.x < currTile.x) {
@@ -356,7 +417,6 @@ var ghosts = {
       yDist = currTile.y - destTile.y
     }
 
-    // console.log('DISTANCE IN COORDS:::::', [xDist, yDist])
     return xDist + yDist
   },
 
@@ -368,7 +428,7 @@ var ghosts = {
     var goingX = direction == -1 || direction == 1 // true if traveling on X-axis
     var goingY = direction == -2 || direction == 2 // true if traveling on Y-axis
 
-    // if going in direction & hit a wall, see if up or down has a wall
+    // if going in direction & hit a wall(2), see if up or down has a wall
     // if only 1 path, take it. if 2 paths choose 1 at random
 
     if (direction == -1) { // left
@@ -408,8 +468,6 @@ var ghosts = {
     }
   }
 }
-
-
 
 
 $(function() {
