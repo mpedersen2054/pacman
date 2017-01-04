@@ -93,6 +93,13 @@ var game = {
       game.gameTimeInterval = setInterval(game.showTime, 1000)
     }
 
+    // always append the github button to the DOM
+    $('body').append(`
+      <a href="#" class="gh-btn">
+        <i class="fa fa-github-alt" aria-hidden="true"></i>
+      </a>
+    `)
+
   },
 
   gameTick: function() {
