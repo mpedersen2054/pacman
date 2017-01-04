@@ -169,17 +169,18 @@ var game = {
       pacman.direction = 0
 
       ghosts.iter = 0
-      ghosts.ghosts[0].x = 13
-      ghosts.ghosts[0].y = 13
 
-      ghosts.ghosts[1].x = 13
-      ghosts.ghosts[1].y = 14
+      ghosts.ghosts['0'].x = 13
+      ghosts.ghosts['0'].y = 13
 
-      ghosts.ghosts[2].x = 14
-      ghosts.ghosts[2].y = 13
+      ghosts.ghosts['1'].x = 14
+      ghosts.ghosts['1'].y = 13
 
-      ghosts.ghosts[3].x = 14
-      ghosts.ghosts[3].y = 14
+      ghosts.ghosts['2'].x = 13
+      ghosts.ghosts['2'].y = 14
+
+      ghosts.ghosts['3'].x = 14
+      ghosts.ghosts['3'].y = 14
       ghosts.activeGhosts = []
 
       game.init()
@@ -366,28 +367,28 @@ var ghosts = {
 
     if (ghosts.iter == 9) {
       g1.active = true
-      g1.y -= g1.toGetOut
-      g1.direction = -1
+      // g1.y -= g1.toGetOut
+      g1.direction = -2
       ghosts.activeGhosts.push(g1)
     }
     if (ghosts.iter == 27) {
       g2.active = true
-      g2.y -= g2.toGetOut
-      g2.direction = 1
+      // g2.y -= g2.toGetOut
+      g2.direction = -2
       ghosts.activeGhosts.push(g2)
     }
 
     if (ghosts.iter == 45) {
       g3.active = true
-      g3.y -= g1.toGetOut
-      g3.direction = -1
+      // g3.y -= g1.toGetOut
+      g3.direction = -2
       ghosts.activeGhosts.push(g3)
     }
 
     if (ghosts.iter == 60) {
       g4.active = true
-      g4.y -= g4.toGetOut
-      g4.direction = 1
+      // g4.y -= g4.toGetOut
+      g4.direction = -2
       ghosts.activeGhosts.push(g4)
     }
 
