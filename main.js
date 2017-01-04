@@ -1,10 +1,40 @@
 
 /*
 
+@game
+== init
+== gameTick
+== showTime
+== displayScore
+== displayWorld
+== death
+== checkIfWin
+== checkIfCollision
+
+@pacman
+== displayPacman
+== movePacman
+== updateBGDirection
+
+@ghosts
+== displayGhosts
+== releaseGhosts
+== moveGhosts
+== getDistanceToTile
+== simpleAI
+
+@templates
+== startScreen
+== intermediateScreen
+== endgameScreen
+== level1
+
+ */
+
+/*
 bugs:
 == sometimes one of the ghosts will get caught in the cage
 == collision is a little janky
-
  */
 
 var game = {
@@ -13,8 +43,7 @@ var game = {
   scoreToWin: null,
   speed: 300,
   time: 0,
-  // set in this.init()
-  gameTickInterval: null,
+  gameTickInterval: null, // set me in .init()
   gameTimeInterval: null,
 
   init: function() {
@@ -123,7 +152,6 @@ var game = {
   },
 
   death: function() {
-    console.log(game.scoreToWin)
     // when pacman dies & he still has more than 1 life left
     // reset pacman & ghosts to starting pos and start game again
     if (pacman.lives > 1) {
