@@ -30,8 +30,6 @@ body {
   margin: 160px auto 20px;
 }
 
-.first-row {}
-
 .first-row img, .first-row h1 {
   display: inline-block;
 }
