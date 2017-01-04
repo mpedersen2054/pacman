@@ -95,7 +95,7 @@ var game = {
 
     // always append the github button to the DOM
     $('body').append(`
-      <a href="#" class="gh-btn">
+      <a href="https://github.com/mpedersen2054/pacman/tree/gh-pages" class="gh-btn">
         <i class="fa fa-github-alt" aria-hidden="true"></i>
       </a>
     `)
